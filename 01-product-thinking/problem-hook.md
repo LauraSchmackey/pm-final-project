@@ -1,53 +1,30 @@
-# Problem Hook & Value Proposition: [StreamLine / RouteLogic / your initiative]
+# Problem Hook & Value Proposition, Module 1
 
-> **Module 1 · ★ Deliverable 1.** Repo file `01-product-thinking/problem-hook.md` — part of your submission.
-> Do the lab in the **Module 1 · Exercise 2 Guide** (linked from the Module 1 deck), then click **⬇ Download .md** — it saves as this exact file. Commit it here.
-> It becomes the **Problem, Value & Hypothesis** slide of your Module 6 final deck. (Your Module 1 · Exercise 1 discovery map lands in `strategic-map.md`.)
+- **Scenario:** My own initiative
 
-## 1. Chosen scenario
+## Strategic crisis
+If we do nothing for 12 months, the company will continue to scale installment-plan offerings through increasingly fragmented and client-specific configurations, making new client onboarding, market expansion, regulatory adaptation, and product changes slower and more expensive.
 
-**Path:** _StreamLine Spotlight (B2C) · RouteLogic Velocity (B2B) · my own initiative_
+As demand for flexible payment solutions grows, BFS risks accumulating product complexity instead of building a scalable platform capability.
 
-_One line on why you picked it._
+Every additional client, market, regulatory requirement, or special case can introduce new rules and dependencies. Over time, this increases implementation effort, operational complexity, maintenance costs, and the risk of inconsistent customer experiences.
 
-## 2. The strategic crisis
+It also limits BFS's ability to respond quickly to regulatory developments such as CCD2, because changes may need to be implemented across multiple individual configurations instead of within a shared framework.
 
-_The big-picture business risk. If the company does nothing for 12 months, what happens to its market position?_
+## Moment of misery
+The user is currently forced to adapt to installment-plan options that are largely determined by individual client configurations rather than dynamically matching the relevant customer, transaction, market, and regulatory context.
 
-> If we do nothing for 12 months, the company will…
+For the end customer, this can mean that available installment options feel arbitrary or unnecessarily restrictive because the underlying configuration differs between merchants or use cases.
 
-## 3. The moment of misery
+For the BFS client, introducing or changing an installment-plan offering can require significant coordination and configuration instead of selecting from a reusable set of standardized capabilities.
 
-_The specific point where the product fails the user, forcing a manual workaround (Google, spreadsheets, group texts, a competitor)._
+For BFS internally, teams may need to repeatedly translate similar requirements into client-specific solutions, creating manual effort and increasing long-term product complexity.
 
-> The user is currently forced to…
+## Problem hook
+We must prevent increasing product fragmentation from limiting the scalability of BFS's installment-plan business by replacing repeated client-specific configurations with a standardized, configurable installment-plan framework that dynamically applies the right rules for each customer, transaction, client, and market.
 
-## 4. Problem hook
+## Value proposition
+For BFS clients that need flexible installment plans across different customers, markets, and use cases., we will Provide one standardized, configurable installment-plan framework that adapts rules and offers without requiring bespoke product setups. because The current setup is becoming harder to scale: each new client, market, or requirement adds complexity, slows expansion, and makes BFS less competitive than providers that can scale new verticals faster..
 
-_One urgent sentence fusing the business risk and the user pain, your pitch for why this is the most important thing to work on right now._
-
-> We must solve [business risk] by addressing [user pain]…
-
-## 5. Value proposition
-
-_Who it's for, the new value, and why it's urgent to launch now._
-
-> For **[who]**, we will **[value]** because **[urgent why]**.
-
-## 6. Cold-read self-review
-
-_Read your hook back as a skeptical stakeholder. If you don't feel the urgency, that's your data._
-
-| Question | Your answer |
-|---|---|
-| Is the business risk high-stakes enough to justify a new initiative? | _____ |
-| Is the moment of misery systemic, or just an edge case? | _____ |
-| Does the value proposition actually remove the obstacle? | _____ |
-
-## 7. Finalized hypothesis _(complete in Module 3)_
-
-> Based on [qual + quant evidence], I believe that [solving X] for [persona] will result in [outcome], as measured by a [X%] change in [success metric]. I will protect [guardrail metric] and make a go/no-go decision after [decision window].
-
-## Link to full artifact
-
-_[link to your Problem Hook Builder export]_
+## Cold-read self-review
+Reading it cold, the strongest part is the clear scalability risk: client-specific configurations become increasingly difficult to maintain as more clients, markets, and regulatory requirements are added. The weakest part is that the end-user pain is less immediate than the internal business pain. I’ll sharpen it by showing that fragmentation does not only increase internal complexity, but also limits BFS’s ability to offer relevant and consistent installment options quickly across different customer and market contexts.
