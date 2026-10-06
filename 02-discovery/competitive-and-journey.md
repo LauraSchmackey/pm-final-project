@@ -1,16 +1,12 @@
-# Competitive Analysis & Journey Map
-
-> **Module 2 · Lab 2 — ★ Deliverable 2.** Repo file `02-discovery/competitive-and-journey.md` — part of your submission.
-> Do the lab in the **Module 2 · Exercise 2 Guide** (linked from the Module 2 deck), then click **⬇ Download .md** — it saves as this exact file. Commit it here.
-> It becomes the **Competitive Analysis & Journey Map** slide of your Module 6 final deck. Builds on your `ai-synthesis.md` and your Module 1 `problem-hook.md`.
+# Competitive Analysis & Journey Map (Module 2)
 
 ## Responses
-
-- **Role, who are you solving for?:** _(not filled in)_
-- **Goal, what is this user ultimately trying to achieve?:** _(not filled in)_
-- **Friction, the main barrier (moment of misery) stopping them:** _(not filled in)_
-- **External tools the user is forced to use:** _(not filled in)_
-- **The process, the 3–5 manual steps they take:** _(not filled in)_
-- **Core frustration, where the process feels most "broken":** _(not filled in)_
-- **The evidence, a quote or behavior from the research:** _(not filled in)_
-- **Journey map, a shareable link or the map file you committed:** _(not filled in)_
+- **Role, who are you solving for? (the specific user segment or profile):** Responsible Payer  - A parent or self-paying customer who is financially responsible for a service and needs to understand exactly what the installment agreement covers.
+- **Goal, what is this user ultimately trying to achieve?:** Understand one clear and predictable payment commitment—how much is financed, what the monthly payment is, and how that obligation may change over time.
+- **Friction, the main barrier (moment of misery) stopping them from succeeding:** The financing journey becomes confusing when the real-world situation does not match the product's assumptions: the payer may not be the service recipient, the final amount may still change, or it may be unclear whether the plan covers the total treatment cost, a single invoice, or only a co-payment. The customer is forced to make a financial decision without a clear picture of what they are actually committing to.
+Evidence: UXR-02, UXR-03, UXR-08, UXR-11; ISSUE-301, ISSUE-307, ISSUE-312, ISSUE-324.
+- **External tools, the outside platforms or tools the user is forced to use:** Treatment plans, invoices and cost estimates; phone/email or messaging with the school/practice; and simple calculators or notes to compare amounts and estimate monthly affordability.
+- **The process, the 3 to 5 manual steps the user takes to get the job done:** 1. Collect the treatment plan, invoice or cost estimate. 2. Compare it with the installment offer to understand what amount is actually financed. 3. Clarify who must sign/pay if payer and service recipient differ. 4. Contact the partner when amounts, reimbursements or future costs are unclear. 5. Recalculate the expected monthly commitment whenever the underlying cost changes.
+- **Core frustration, the exact moment the process feels most “broken”:** The process feels most broken when the customer is ready to make a financial commitment but still cannot tell what the installment plan actually covers or how much the obligation may change later. They must manually reconstruct information that should be clear within one payment journey.
+- **The evidence, a specific quote or behavior from the research that proves this:** “I don't understand what the installment is actually based on — the full treatment cost, my co-payment or just this invoice?” (UXR-08). “I'd use installments, but only if I can immediately see the total amount, monthly payment, duration and any additional cost.” (UXR-11). The issue data reinforces this: payer and recipient cannot be separated (ISSUE-301), financed amounts can change (ISSUE-307), and treatment cost, invoice and financed amount are not clearly distinguished (ISSUE-312).
+- **Your journey map, a shareable link, or the map file you committed (e.g. journey-map.html):** _(not filled in)_
