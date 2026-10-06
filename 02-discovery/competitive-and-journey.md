@@ -10,3 +10,6 @@ Evidence: UXR-02, UXR-03, UXR-08, UXR-11; ISSUE-301, ISSUE-307, ISSUE-312, ISSUE
 - **Core frustration, the exact moment the process feels most “broken”:** The process feels most broken when the customer is ready to make a financial commitment but still cannot tell what the installment plan actually covers or how much the obligation may change later. They must manually reconstruct information that should be clear within one payment journey.
 - **The evidence, a specific quote or behavior from the research that proves this:** “I don't understand what the installment is actually based on — the full treatment cost, my co-payment or just this invoice?” (UXR-08). “I'd use installments, but only if I can immediately see the total amount, monthly payment, duration and any additional cost.” (UXR-11). The issue data reinforces this: payer and recipient cannot be separated (ISSUE-301), financed amounts can change (ISSUE-307), and treatment cost, invoice and financed amount are not clearly distinguished (ISSUE-312).
 - **Your journey map, a shareable link, or the map file you committed (e.g. journey-map.html):** _(not filled in)_
+
+- **The Strategy: Standardize & configure
+Scale the installment offering across verticals by keeping one standardized core while allowing controlled configuration for actor roles, cost structures, handoff flows and communication context.
