@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Self-Service Bank Detail Updates for Installment Plans</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Saans:wght@400;600;700;800;900&family=Antarctican+Mono:wght@400;500&display=swap');
+
+    :root{
+      --bg:#07162C;
+      --fg:#ffffff;
+      --muted:#ffffff;
+      --orange:#fb923c;
+      --orange-soft:#fdba74;
+      --cyan:#22d3ee;
+      --teal:#34d399;
+      --blue:#60a5fa;
+      --violet:#a78bfa;
+      --pink:#f472b6;
+      --card:rgba(255,255,255,.065);
+      --card-strong:rgba(255,255,255,.105);
+      --line:rgba(251,146,60,.25);
+      --line-bright:rgba(251,146,60,.55);
+      --shadow:0 24px 70px rgba(0,0,0,.34);
+      --radius:16px;
+      --mono:'Antarctican Mono','SFMono-Regular','Roboto Mono',monospace;
+      --sans:'Saans','Inter','Aptos','Segoe UI',Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--bg)}
+    body{margin:0;background:radial-gradient(circle at 12% 5%,rgba(34,211,238,.16),transparent 26vw),radial-gradient(circle at 88% 12%,rgba(251,146,60,.18),transparent 28vw),linear-gradient(180deg,#07162C 0%,#061229 100%);color:var(--fg);font-family:var(--sans);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+
+    .progress{position:fixed;top:0;left:0;z-index:50;height:5px;width:100%;background:rgba(255,255,255,.08)}
+    .progress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--orange),var(--cyan),var(--teal));box-shadow:0 0 18px rgba(34,211,238,.5);transition:width .12s linear}
+    .dots{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:12px}
+    .dots a{width:9px;height:9px;border-radius:999px;border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.16);transition:all .2s ease}
+    .dots a.active{height:28px;background:var(--orange);border-color:var(--orange);box-shadow:0 0 22px rgba(251,146,60,.5)}
+
+    section{min-height:100vh;scroll-snap-align:start;position:relative;display:grid;place-items:center;padding:3.1vh 5.2vw;overflow:hidden}
+    section:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(circle at 50% 50%,black,transparent 75%);pointer-events:none}
+    .slide{position:relative;z-index:1;width:min(1440px,100%);height:min(56.25vw,calc(100vh - 6.2vh));min-height:620px;display:grid;gap:clamp(14px,1.4vw,22px)}
+    @media (max-height:760px){.slide{min-height:0;height:calc(100vh - 6.2vh)}section{padding:2.6vh 4.5vw}.dense{font-size:clamp(8px,.78vw,12px)}}
+
+    .eyebrow{font-family:var(--mono);font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--orange-soft);font-size:clamp(10px,.9vw,13px)}
+    h1,h2,h3,p{margin:0}
+    h1{font-weight:900;line-height:.94;letter-spacing:-.055em;font-size:clamp(54px,7.2vw,112px)}
+    h2{font-weight:900;line-height:.96;letter-spacing:-.04em;font-size:clamp(34px,4.25vw,66px)}
+    h3{font-size:clamp(16px,1.45vw,22px);line-height:1.06;font-weight:800;letter-spacing:-.02em}
+    p{font-size:clamp(12px,1.05vw,17px);line-height:1.36;color:rgba(255,255,255,.9)}
+    .small{font-size:clamp(10px,.86vw,13px);line-height:1.28;color:rgba(255,255,255,.84)}
+    .dense{font-size:clamp(9px,.82vw,12.7px);line-height:1.22;color:rgba(255,255,255,.86)}
+    .muted{color:rgba(255,255,255,.72)}
+    .mono{font-family:var(--mono)}
+    .accent{color:var(--orange-soft)}
+    .cyan{color:var(--cyan)}.teal{color:var(--teal)}.blue{color:var(--blue)}.violet{color:var(--violet)}.pink{color:var(--pink)}
+
+    .card{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(150deg,rgba(255,255,255,.105),rgba(255,255,255,.035));box-shadow:var(--shadow);padding:clamp(15px,1.35vw,24px);backdrop-filter:blur(14px)}
+    .card.flat{box-shadow:none;background:rgba(255,255,255,.055)}
+    .hero-card{border:1px solid var(--line-bright);background:radial-gradient(circle at 0 0,rgba(251,146,60,.24),transparent 34%),radial-gradient(circle at 100% 0,rgba(34,211,238,.16),transparent 38%),linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.045));box-shadow:0 34px 90px rgba(0,0,0,.42)}
+    .button{display:inline-flex;align-items:center;gap:10px;width:max-content;border:1px solid rgba(251,146,60,.55);border-radius:999px;padding:12px 18px;background:linear-gradient(90deg,rgba(251,146,60,.95),rgba(251,146,60,.68));font-weight:800;box-shadow:0 18px 50px rgba(251,146,60,.18)}
+    .pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);padding:8px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.88)}
+    .pill.orange{border-color:rgba(251,146,60,.45);background:rgba(251,146,60,.15);color:#fff}.pill.cyan{border-color:rgba(34,211,238,.45);background:rgba(34,211,238,.12)}.pill.teal{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.12)}.pill.violet{border-color:rgba(167,139,250,.45);background:rgba(167,139,250,.12)}
+
+    .cover{grid-template-rows:auto 1fr auto}.cover-main{display:grid;grid-template-columns:1.04fr .76fr;gap:28px;align-items:center}.title-block{padding:clamp(22px,2.8vw,40px)}
+    .pitch{font-size:clamp(18px,1.7vw,27px);line-height:1.24;margin-top:24px;color:#fff;max-width:970px}.meta-grid{display:grid;gap:14px}.meta-item{padding:18px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.06)}.meta-item b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange-soft);margin-bottom:7px}.meta-item span,.meta-item a{font-size:clamp(12px,1vw,15px);overflow-wrap:anywhere;color:rgba(255,255,255,.88)}
+    .orb{position:absolute;border-radius:50%;filter:blur(.2px);opacity:.9}.orb.one{right:11%;top:16%;width:130px;height:130px;background:radial-gradient(circle,var(--cyan),transparent 62%)}.orb.two{right:25%;bottom:14%;width:74px;height:74px;background:radial-gradient(circle,var(--orange),transparent 63%)}.orb.three{left:6%;bottom:16%;width:58px;height:58px;background:radial-gradient(circle,var(--pink),transparent 65%)}
+
+    .two-col{grid-template-rows:auto 1fr;}.header{display:flex;justify-content:space-between;gap:20px;align-items:end}.slide-no{font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.6)}.content-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;min-height:0}.stack{display:grid;gap:14px;min-height:0}.callout{border-left:5px solid var(--orange);background:linear-gradient(90deg,rgba(251,146,60,.18),rgba(255,255,255,.055));padding:18px;border-radius:15px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.metric{padding:13px;border-radius:14px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.11)}.metric strong{display:block;font-family:var(--mono);font-size:clamp(20px,2.4vw,34px);line-height:1;color:var(--orange-soft);margin-bottom:5px}.metric span{font-size:11px;color:rgba(255,255,255,.78)}
+
+    .research{grid-template-rows:auto 1fr auto}.research-body{display:grid;grid-template-columns:.88fr 1.12fr;gap:18px;min-height:0}.journey{display:grid;gap:10px}.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.step{border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.06);padding:9px 10px;font-size:clamp(9px,.74vw,12px);line-height:1.12}.arrow{color:var(--orange-soft);font-weight:900}.misery{border-color:rgba(244,114,182,.55);background:rgba(244,114,182,.12)}.journey-band{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}.journey-band .card{padding:14px}
+
+    .blueprint{grid-template-rows:auto 1fr}.roadmap{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.roadmap .card{padding:14px}.roadmap h3{font-size:clamp(14px,1.15vw,18px)}.blueprint-body{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;min-height:0}.prd-list{display:grid;gap:10px}.prd-list p{padding-left:14px;border-left:3px solid rgba(34,211,238,.55)}
+
+    .validation{grid-template-rows:auto 1fr}.validation-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto;gap:12px;min-height:0}.validation-grid .wide{grid-column:span 2}.validation-grid .tall{grid-row:span 2}.rule-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.rule{padding:9px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055)}.rule b{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--orange-soft)}
+
+    .launch{grid-template-rows:auto 1fr}.launch-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:18px;min-height:0}.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.dashboard{display:grid;grid-template-columns:1fr 1fr;gap:12px}.dashboard .bad{grid-column:1/-1;border-color:rgba(244,114,182,.55);background:linear-gradient(145deg,rgba(244,114,182,.16),rgba(255,255,255,.045))}.gauge{height:10px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;margin:9px 0}.gauge span{display:block;height:100%;width:72%;border-radius:999px;background:linear-gradient(90deg,var(--orange),var(--teal))}
+
+    .story{grid-template-rows:auto 1fr}.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}.quote{font-size:clamp(20px,2.1vw,34px);line-height:1.08;font-weight:900;letter-spacing:-.035em;color:#fff}.next-box{display:grid;gap:14px}.takeaway{border-left:4px solid var(--teal);padding-left:16px}
+
+    .thanks{grid-template-rows:1fr auto}.thanks-main{display:grid;place-items:center;text-align:center}.thanks h2{font-size:clamp(50px,7vw,108px)}.submit-pill{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:linear-gradient(90deg,var(--orange),#f97316);box-shadow:0 30px 90px rgba(251,146,60,.25);padding:16px 24px;font-weight:900;margin-top:26px}.footer-links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+
+    @media (max-width:960px){.slide{height:auto;min-height:calc(100vh - 6.2vh)}.cover-main,.content-2,.research-body,.blueprint-body,.launch-grid,.story-grid{grid-template-columns:1fr}.roadmap,.validation-grid,.dashboard,.journey-band{grid-template-columns:1fr}.validation-grid .wide,.validation-grid .tall{grid-column:auto;grid-row:auto}.dots{display:none}section{overflow:visible}}
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <nav class="dots" aria-label="Slide navigation">
+    <a href="#cover" aria-label="Cover"></a><a href="#strategy" aria-label="Slide 5 Strategy"></a><a href="#research" aria-label="Slide 6 Research"></a><a href="#blueprint" aria-label="Slide 7 Blueprint"></a><a href="#validation" aria-label="Slide 8 Validation"></a><a href="#launch" aria-label="Slide 9 Launch"></a><a href="#story" aria-label="Slide 10 Story"></a><a href="#submit" aria-label="Thank you"></a>
+  </nav>
+
+  <section id="cover">
+    <span class="orb one"></span><span class="orb two"></span><span class="orb three"></span>
+    <div class="slide cover">
+      <div class="eyebrow">Final Project · Product School Product Management Certification</div>
+      <div class="cover-main">
+        <div class="hero-card title-block">
+          <h1>Self-Service Bank Detail Updates for Installment Plans</h1>
+          <p class="pitch">Enable Responsible Payers to update the direct-debit bank account for eligible installment plans in self-service instead of contacting customer support.</p>
+        </div>
+        <div class="meta-grid">
+          <div class="meta-item"><b>Name / cohort</b><span>Laura Schmackey PM Cohort Oct 2026</span></div>
+          <div class="meta-item"><b>Repo URL</b><a href="https://github.com/LauraSchmackey/pm-final-project" target="_blank" rel="noopener">https://github.com/LauraSchmackey/pm-final-project</a></div>
+          <div class="meta-item"><b>Prototype</b><a href="https://lovable.dev/preview/2VcaYgW19oXjcK8ztBFFODBCdyf59z74" target="_blank" rel="noopener">https://lovable.dev/preview/2VcaYgW19oXjcK8ztBFFODBCdyf59z74</a></div>
+        </div>
+      </div>
+      <div class="pill orange">Arrow keys / Space to navigate</div>
+    </div>
+  </section>
+
+  <section id="strategy">
+    <div class="slide two-col">
+      <div class="header"><div><div class="eyebrow">Slide 5</div><h2>Strategy</h2></div><div class="slide-no">05 / 10</div></div>
+      <div class="content-2">
+        <div class="card">
+          <h3 class="accent">Problem statement hook</h3>
+          <p>BFS needs to prevent growing product fragmentation from limiting the scalability of its installment-plan business. A standardized, configurable framework is the strategic direction, reducing the need for client-specific solutions.</p>
+          <p style="margin-top:12px">One practical opportunity within this strategy is post-creation servicing. Responsible Payers currently cannot update their direct-debit bank details in the customer portal, even though the core system already supports this change. As a result, customers must contact support for a task that could be completed independently.</p>
+        </div>
+        <div class="stack">
+          <div class="card flat">
+            <h3 class="cyan">Value proposition</h3>
+            <p>For BFS clients, the broader value proposition is a standardized, configurable installment-plan framework that supports different customers, markets and use cases without requiring bespoke product setups.</p>
+            <p style="margin-top:10px">For Responsible Payers, self-service bank-detail updates are a focused application of this direction. Customers gain more control over their existing installment plans, while BFS can reduce avoidable manual servicing without introducing new credit or risk logic.</p>
+          </div>
+          <div class="callout">
+            <div class="eyebrow">Data-backed hypothesis</div>
+            <div class="metric-row" style="margin:12px 0">
+              <div class="metric"><strong>316k</strong><span>installment agreements</span></div>
+              <div class="metric"><strong>46.2k</strong><span>manual customer contacts</span></div>
+              <div class="metric"><strong>10–15%</strong><span>relative reduction objective</span></div>
+            </div>
+            <p class="small">Of approximately 316,000 installment agreements, 46,200 were followed by manual customer contact. This indicates a significant overall servicing opportunity, but the proportion attributable to bank-detail changes is not yet known.</p>
+            <p class="small" style="margin-top:8px">I believe that enabling Responsible Payers to update direct-debit bank details through the customer portal will reduce bank-detail-related phone and email contacts without increasing direct-debit returns.</p>
+            <p class="small" style="margin-top:8px">The broader product objective remains a 10–15% relative reduction in post-creation manual contacts. The contribution of this individual feature will be validated through a controlled experiment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="research">
+    <div class="slide research">
+      <div class="header"><div><div class="eyebrow">Slide 6</div><h2>Research</h2></div><div class="slide-no">06 / 10</div></div>
+      <div class="research-body">
+        <div class="card">
+          <h3 class="accent">Competitive analysis / workaround</h3>
+          <p>The current servicing journey reveals a clear self-service gap: Responsible Payers cannot update direct-debit bank details through the customer portal after creating an installment plan. Instead, they must contact customer support by phone, email or free-text message.</p>
+          <p style="margin-top:12px">The underlying capability already exists in the core system. The opportunity is therefore not to develop new payment functionality, but to make an existing servicing process accessible through the portal.</p>
+          <p style="margin-top:12px">This is an identified internal workaround rather than evidence of a validated competitive disadvantage. The frequency of bank-detail requests and their contribution to overall manual contacts still need to be quantified.</p>
+        </div>
+        <div class="journey">
+          <div class="card flat">
+            <h3 class="cyan">CURRENT JOURNEY</h3>
+            <div class="flow" style="margin-top:13px">
+              <span class="step">Installment plan created</span><span class="arrow">→</span><span class="step">Responsible Payer needs to change bank details</span><span class="arrow">→</span><span class="step">checks customer portal</span><span class="arrow">→</span><span class="step misery">no self-service option available</span><span class="arrow">→</span><span class="step">contacts support by phone or email</span><span class="arrow">→</span><span class="step">support manually processes the change.</span>
+            </div>
+          </div>
+          <div class="card flat">
+            <h3 class="teal">PROPOSED JOURNEY</h3>
+            <div class="flow" style="margin-top:13px">
+              <span class="step">Open eligible installment plan</span><span class="arrow">→</span><span class="step">select Update Bank Details</span><span class="arrow">→</span><span class="step">enter account holder and new IBAN</span><span class="arrow">→</span><span class="step">validate and review masked details</span><span class="arrow">→</span><span class="step">submit</span><span class="arrow">→</span><span class="step">receive confirmation.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="journey-band">
+        <div class="card"><h3 class="pink">MOMENT OF MISERY</h3><p class="small">A routine payment-management task requires manual assistance, although the underlying system already supports it.</p></div>
+        <div class="card"><h3 class="teal">EXPECTED IMPROVEMENT</h3><p class="small">Complete the change independently without contacting customer support, while maintaining existing eligibility and payment-safety rules.</p></div>
+        <div class="card"><h3 class="violet">Research gap</h3><p class="small">The frequency of bank-detail requests and their contribution to overall manual contacts still need to be quantified.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="blueprint">
+    <div class="slide blueprint">
+      <div class="header"><div><div class="eyebrow">Slide 7</div><h2>Blueprint</h2></div><a class="button" href="https://lovable.dev/preview/2VcaYgW19oXjcK8ztBFFODBCdyf59z74" target="_blank" rel="noopener">View prototype →</a></div>
+      <div class="blueprint-body">
+        <div class="stack">
+          <div class="roadmap">
+            <div class="card"><div class="eyebrow">NOW — 6–8 week pilot</div><p class="small">Enable self-service bank-detail updates for eligible installment plans. The core-system capability already exists, making this a focused opportunity to reduce servicing friction without changing credit or risk logic.</p></div>
+            <div class="card"><div class="eyebrow">NEXT — Following 1–2 sprints</div><p class="small">Explore early repayment, additional payments and changing the due date of an installment.</p></div>
+            <div class="card"><div class="eyebrow">LATER — Validated backlog</div><p class="small">Consider more complex plan adjustments, including changing the number of installments or the regular debit date.</p></div>
+            <div class="card"><div class="eyebrow">OUT FOR NOW</div><p class="small">Exclude changes requiring new credit/risk logic or major core-system modifications.</p></div>
+          </div>
+          <div class="callout">
+            <h3 class="accent">PRIORITISATION RATIONALE</h3>
+            <p>Start with an existing capability that addresses a clear self-service gap. Validate adoption, operational impact and payment reliability before expanding the servicing scope.</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="cyan">PRD highlights</h3>
+          <div class="prd-list" style="margin-top:12px">
+            <p class="small">The first release enables Responsible Payers to update direct-debit bank details for eligible installment plans through the existing customer portal.</p>
+            <p class="small">Core flow: Open eligible plan → enter account holder and IBAN → validate input → review masked account details → confirm submission → receive immediate confirmation.</p>
+            <p class="small">The solution must handle invalid IBANs, ineligible plans and system errors. Existing eligibility rules and core-system payment logic remain unchanged.</p>
+            <p class="small">The feature is intentionally limited to bank-detail updates. Early repayment, due-date changes and more complex plan adjustments remain outside the first release.</p>
+            <p class="small">Success will be assessed through completed self-service updates, fewer bank-detail-related manual contacts and stable direct-debit return rates.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="validation">
+    <div class="slide validation">
+      <div class="header"><div><div class="eyebrow">Slide 8</div><h2>Validation</h2></div><div class="slide-no">08 / 10</div></div>
+      <div class="validation-grid">
+        <div class="card wide"><h3 class="accent">HYPOTHESIS</h3><p class="dense">Self-service bank-detail updates will reduce bank-detail-related phone and email contacts without worsening payment reliability.</p></div>
+        <div class="card"><h3 class="cyan">CONTROL / TREATMENT</h3><p class="dense">Control: Existing manual support process.</p><p class="dense" style="margin-top:6px">Treatment: Eligible Responsible Payers can update bank details through the portal, including validation, review and confirmation.</p></div>
+        <div class="card"><h3 class="teal">EXPERIMENT DESIGN</h3><p class="dense">Randomise Responsible Payers 50/50, maintaining the same assignment across their installment plans. Analyse eligible plans by original assignment, including non-users.</p></div>
+        <div class="card wide"><h3 class="blue">PRIMARY METRIC</h3><p class="dense">Percentage of eligible newly created installment plans with at least one bank-detail-related phone or email contact within 30 days.</p><h3 class="violet" style="margin-top:10px">BASELINE &amp; MINIMUM DETECTABLE EFFECT</h3><p class="dense">The feature-specific baseline is currently unknown and must be established before finalising the sample size. Target effect: 15% relative reduction.</p><p class="dense" style="margin-top:5px">The assumed 12% all-reason contact baseline must not be treated as the bank-detail-specific baseline.</p></div>
+        <div class="card"><h3 class="pink">SUPPORTING METRICS</h3><p class="dense">Successful self-service updates without subsequent bank-detail support, with a proposed completion target of at least 70% of attempts. Track all-reason manual contact rates as a secondary business metric.</p></div>
+        <div class="card"><h3 class="accent">DURATION &amp; SAMPLE</h3><p class="dense">Recalculate sample size using the measured baseline, 5% significance and 80% power, accounting for repeat payers. Plan approximately eight weeks of recruitment, followed by complete 30-day contact and 60-day payment-safety observation.</p></div>
+        <div class="card"><h3 class="cyan">GUARDRAIL</h3><p class="dense">The upper one-sided 95% confidence bound for the increase in direct-debit return rate versus control must remain below +0.2 percentage points.</p></div>
+        <div class="card wide"><h3 class="teal">DECISION RULES</h3><div class="rule-grid"><div class="rule"><b>SHIP</b><p class="dense">At least 15% relative contact reduction, statistically significant benefit, ≥70% completion and safety guardrail passed.</p></div><div class="rule"><b>ITERATE</b><p class="dense">Safety passes, but adoption or impact falls below target.</p></div><div class="rule"><b>INCONCLUSIVE</b><p class="dense">Insufficient sample, incomplete observation or uncertain results.</p></div><div class="rule"><b>STOP</b><p class="dense">Statistically supported contact-rate harm, safety-boundary breach or critical defect.</p></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="launch">
+    <div class="slide launch">
+      <div class="header"><div><div class="eyebrow">Slide 9</div><h2>Launch</h2></div><div class="pill orange">M — Targeted launch</div></div>
+      <div class="launch-grid">
+        <div class="stack">
+          <div class="card">
+            <h3 class="accent">GTM strategy</h3>
+            <p class="dense"><b>GOAL</b></p>
+            <p class="dense">Drive adoption of self-service bank-detail updates among eligible Responsible Payers and reduce avoidable bank-detail-related manual support contacts.</p>
+            <p class="dense" style="margin-top:6px">The broader installment-plan product objective remains a 10–15% relative reduction in post-creation manual contacts across all plans (assumed baseline: 12%, target: 10.2–10.8%). This single feature contributes to that objective but is not expected to achieve it independently.</p>
+            <p class="dense" style="margin-top:8px"><b>AUDIENCE</b></p><p class="dense">Responsible Payers with eligible installment plans who need to change the bank account used for direct debit.</p>
+            <p class="dense" style="margin-top:8px"><b>LAUNCH TIER</b></p><p class="dense">M — Targeted launch. Limited direct revenue impact, but meaningful potential operational value through reduced servicing effort.</p>
+            <div class="pill-row"><span class="pill cyan">Customer portal</span><span class="pill teal">FAQs</span><span class="pill violet">Help pages</span><span class="pill orange">Customer Service referrals</span></div>
+          </div>
+          <div class="card flat"><p class="dense"><b>ENABLEMENT</b></p><p class="dense">Updated portal guidance, support scripts, agent training and analytics tracking. PM coordinates delivery with Engineering, Design, QA and Customer Service.</p><p class="dense" style="margin-top:7px"><b>BUDGET</b></p><p class="dense">No additional marketing budget required. Launch through existing customer-facing channels.</p></div>
+        </div>
+        <div class="dashboard">
+          <div class="card"><h3 class="accent">Primary metric</h3><p class="dense">Reduce the percentage of all newly created installment plans followed by at least one manual phone/email contact from 12% to 10.2–10.8% (10–15% relative reduction).</p><div class="gauge"><span></span></div></div>
+          <div class="card"><h3 class="cyan">Adoption</h3><p class="dense">Track successful self-service bank-detail updates, completion rate among started flows and the share of observed bank-detail change requests handled through self-service.</p></div>
+          <div class="card"><h3 class="teal">Guardrail</h3><p class="dense">Direct-debit return rates must not increase compared with the control group.</p></div>
+          <div class="card"><h3 class="blue">PRIMARY FEATURE METRIC</h3><p class="dense">Reduce the percentage of eligible newly created installment plans followed by bank-detail-related phone or email contact within 30 days. Target: 15% relative reduction versus control, subject to baseline validation.</p></div>
+          <div class="card"><h3 class="violet">BROADER BUSINESS METRIC</h3><p class="dense">Monitor the overall post-creation manual contact rate across all installment plans. The existing product-level objective is a 10–15% relative reduction from an assumed 12% baseline to 10.2–10.8%, supported by this and other self-service improvements.</p></div>
+          <div class="card"><h3 class="teal">PAYMENT SAFETY</h3><p class="dense">Direct-debit return rates must remain within the defined experiment guardrail versus control.</p></div>
+          <div class="card bad"><h3 class="pink">BAD SIGNAL</h3><p class="dense">Low adoption despite continued manual bank-detail requests, high flow abandonment, no measurable reduction in related support contacts or deteriorating payment reliability.</p><h3 class="accent" style="margin-top:8px">RESPONSE</h3><p class="dense">Investigate discoverability, usability and eligibility issues. Pause rollout if payment reliability breaches the safety boundary.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="story">
+    <div class="slide story">
+      <div class="header"><div><div class="eyebrow">Slide 10</div><h2>Story</h2></div><div class="slide-no">10 / 10</div></div>
+      <div class="story-grid">
+        <div class="card hero-card">
+          <div class="eyebrow">Friction + aha moment</div>
+          <p class="quote" style="margin-top:14px">The biggest challenge was translating a broad servicing problem into a focused, measurable feature.</p>
+          <p style="margin-top:18px">It was tempting to address several customer pain points at once, but prioritization forced me to focus on what delivers real value with manageable effort.</p>
+          <p style="margin-top:14px">The aha moment was realizing that updating bank details is already supported by our core system but not available in self-service. This makes it a genuine quick win without having to touch complex payment logic.</p>
+        </div>
+        <div class="card next-box">
+          <div><h3 class="cyan">Key takeaways / next</h3><p style="margin-top:12px">I learned that prioritization is really about knowing what not to build. AI was helpful for structuring ideas and spotting gaps, but I still had to challenge its suggestions, especially when it came to our business processes and metrics.</p></div>
+          <div class="takeaway"><p>Next, I'd test the prototype with real users, check whether my assumptions about manual contacts are correct, and see if the feature actually makes a difference before rolling it out further.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="submit">
+    <div class="slide thanks">
+      <div class="thanks-main">
+        <div>
+          <div class="eyebrow">Thank you / Submit</div>
+          <h2>Ready for review</h2>
+          <p class="pitch" style="max-width:780px;margin-left:auto;margin-right:auto">Self-Service Bank Detail Updates for Installment Plans</p>
+          <div class="submit-pill">Submit to the learning platform</div>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a class="pill orange" href="https://github.com/LauraSchmackey/pm-final-project" target="_blank" rel="noopener">Repo URL · pm-final-project</a>
+        <span class="pill cyan">Laura Schmackey PM Cohort Oct 2026</span>
+        <a class="pill teal" href="https://lovable.dev/preview/2VcaYgW19oXjcK8ztBFFODBCdyf59z74" target="_blank" rel="noopener">Prototype link</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const sections = Array.from(document.querySelectorAll('section'));
+    const dots = Array.from(document.querySelectorAll('.dots a'));
+    const bar = document.getElementById('progressBar');
+
+    function activeIndex(){
+      const mid = window.scrollY + window.innerHeight / 2;
+      let idx = 0;
+      sections.forEach((s,i)=>{ if(s.offsetTop <= mid) idx = i; });
+      return idx;
+    }
+    function updateUI(){
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+      bar.style.width = pct + '%';
+      const idx = activeIndex();
+      dots.forEach((d,i)=>d.classList.toggle('active', i === idx));
+    }
+    function go(i){
+      const target = sections[Math.max(0, Math.min(sections.length - 1, i))];
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+    window.addEventListener('scroll', updateUI, {passive:true});
+    window.addEventListener('resize', updateUI);
+    document.addEventListener('keydown', (e)=>{
+      const tag = (document.activeElement && document.activeElement.tagName || '').toLowerCase();
+      if(['input','textarea','select'].includes(tag)) return;
+      const idx = activeIndex();
+      if(e.key === 'ArrowDown' || e.key === ' '){ e.preventDefault(); go(idx + 1); }
+      if(e.key === 'ArrowUp'){ e.preventDefault(); go(idx - 1); }
+      if(e.key === 'Home'){ e.preventDefault(); go(0); }
+      if(e.key === 'End'){ e.preventDefault(); go(sections.length - 1); }
+      if(e.key === 'Escape'){ if(document.activeElement) document.activeElement.blur(); }
+    });
+    dots.forEach((d,i)=>d.addEventListener('click',()=>setTimeout(()=>go(i),0)));
+    updateUI();
+  </script>
+</body>
+</html>
